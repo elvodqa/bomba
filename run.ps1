@@ -1,1 +1,1 @@
-deno run --allow-net --allow-read --allow-write --allow-env --allow-run --unstable Source/main.ts
+deno run --allow-net --allow-read --allow-write --allow-env --allow-run Source/main.ts
