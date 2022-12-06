@@ -1,7 +1,7 @@
-import {Database, SQLite3Connector} from 'https://deno.land/x/denodb/mod.ts'
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
-import {User, Score, CheckPassword, AddScore, GetRank, GetScore} from './user.ts'
+import {Database, SQLite3Connector} from "https://deno.land/x/denodb@v1.1.0/mod.ts"
+import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
+import {User, Score, CheckPassword, AddScore, GetScore} from './user.ts'
 
 const app = new Application();
 const router = new Router();
