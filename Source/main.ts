@@ -18,7 +18,7 @@ const db = new Database(connection)
 
 db.link([User, Score])
 
-await db.sync({drop: true})
+//await db.sync({drop: true})
 
 // http://localhost:8000/api/getUser/Emir Cengiz
 router
@@ -96,21 +96,39 @@ router
       console.log("Missing parameters");
       return;
     }
+    // if same score by the user exists and the score 
+    const scoreExists = await Score.where('username', username).where('map_id', Number(map_id)).first();
+    if (scoreExists) {
+      await Score.where('username', username).where('map_id', Number(map_id)).update({
+        score: Number(score),
+        great_count: Number(great_count),
+        good_count: Number(good_count),
+        bad_count: Number(bad_count),
+        miss_count: Number(miss_count),
+      })
+      context.response.body = "Score updated";
+      console.log("Score updated");
+      return;
+    }
+    // if score doesn't exist, create it
     await AddScore(username, Number(map_id), Number(score), Number(great_count), 
       Number(good_count), Number(bad_count), Number(miss_count));
     context.response.body = "Score submitted";
     console.log("Score submitted");
 })
 
-/// Example: http://localhost:8000/api/getScore?username=Emir?map_id=123
+/// Example: http://localhost:8000/api/getScore?username=Emi&m?map_id=123
 router
   .get("/api/getScore", async (context) => {
     if (!context.request.url.searchParams.get('username') || !context.request.url.searchParams.get('map_id')) {
       context.response.body = "Missing parameters";
       console.log("Missing parameters");
+      // send error
+      context.response.status = 401;
       return;
     }
-    const score = await GetScore(context.request.url.searchParams.get('username') || '{}', Number(context.request.url.searchParams.get('map_id')));
+    //const score = await GetScore(context.request.url.searchParams.get('username') || '{}', Number(context.request.url.searchParams.get('map_id')));
+    const score = await Score.where('username', context.request.url.searchParams.get('username')).where('map_id', Number(context.request.url.searchParams.get('map_id'))).first();
     context.response.body = score;
     console.log(score);
 })
